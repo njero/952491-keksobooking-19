@@ -274,5 +274,4 @@ pinMain.addEventListener('keydown', function (evt) {
 
 /* До активации страницы */
 disableForm();
-activatePage();
 fillAddress();
