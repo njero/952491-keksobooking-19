@@ -1,9 +1,16 @@
 'use strict';
 (function () {
 
-  var LEFT_MOUSE = 0;
-  var ENTER_KEY = 'Enter';
+  var MouseCode = {
+    LEFT: 0,
+  };
+
+  var KeyboardCode = {
+    ENTER: 'Enter',
+  };
+
   var pinMain = document.querySelector('.map__pin--main');
+
 
   /* Функция активации элементов страницы */
   var activatePage = function () {
@@ -18,14 +25,14 @@
 
   /* Активация по нажатию мышью по метке */
   pinMain.addEventListener('mousedown', function (evt) {
-    if (evt.button === LEFT_MOUSE) {
+    if (evt.button === MouseCode.LEFT) {
       activatePage();
     }
   });
 
   /* Активация по нажатию enter по метке */
   pinMain.addEventListener('keydown', function (evt) {
-    if (evt.key === ENTER_KEY) {
+    if (evt.key === KeyboardCode.ENTER) {
       activatePage();
     }
   });
