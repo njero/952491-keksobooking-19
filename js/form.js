@@ -4,15 +4,28 @@
 (function () {
 
   var noticeForm = document.querySelector('.ad-form');
-  var formTags = ['#avatar', '#title', '#address', '#type', '#price', '#timein',
-    '#timeout', '#room_number', '#capacity', '.features', '#description', '#images',
-    '.ad-form__submit', '.ad-form__reset'];
+  var formTags = [
+    '#avatar',
+    '#title',
+    '#address',
+    '#type',
+    '#price',
+    '#timein',
+    '#timeout',
+    '#room_number',
+    '#capacity',
+    '.features',
+    '#description',
+    '#images',
+    '.ad-form__submit',
+    '.ad-form__reset',
+  ];
 
   var housePrices = {
-    'bungalo': '1000',
-    'flat': '1000',
-    'house': '5000',
-    'palace': '10000',
+    bungalo: '0',
+    flat: '1000',
+    house: '5000',
+    palace: '10000',
   };
 
   var changeFormElementAbility = function (selector, isActivate) {
@@ -32,9 +45,8 @@
 
   // Получение адреса
   var getAddress = function () {
-    var x = Math.floor(parseInt(window.map.pinMain.style.left, 10) + window.map.PIN_WIDTH / 2);
-    var y = Math.floor(parseInt(window.map.pinMain.style.top, 10) + window.map.PIN_HEIGHT);
-
+    var x = Math.floor(parseInt(window.map.pinMain.style.left, 10) + window.map.PinSize.WIDTH / 2);
+    var y = Math.floor(parseInt(window.map.pinMain.style.top, 10) + window.map.PinSize.HEIGHT);
     return x + ', ' + y;
   };
 
@@ -118,10 +130,6 @@
     capacity.setCustomValidity('');
 
   };
-
-  /*  var setValidatorToForm = function () {
-      guestInputValidation();
-    };*/
 
   roomNumber.addEventListener('input', guestInputValidation);
   noticeForm.querySelector('.ad-form__submit').addEventListener('click', guestInputValidation);

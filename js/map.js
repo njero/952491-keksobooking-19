@@ -2,8 +2,11 @@
 
 // Модуль карты
 (function () {
-  var PIN_WIDTH = 156;
-  var PIN_HEIGHT = 156;
+  var PinSize = {
+    WIDTH: 156,
+    HEIGHT: 156
+  };
+
   var map = document.querySelector('.map');
   var pinMain = document.querySelector('.map__pin--main');
 
@@ -14,8 +17,7 @@
   };
 
   window.map = {
-    PIN_HEIGHT: PIN_HEIGHT,
-    PIN_WIDTH: PIN_WIDTH,
+    PinSize: PinSize,
     element: map,
     pinMain: pinMain,
     showPins: showNewPins,
