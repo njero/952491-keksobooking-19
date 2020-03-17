@@ -6,7 +6,7 @@
   };
 
   var KeyboardCode = {
-    ENTER: 'Enter',
+    ENTER: 'Enter'
   };
 
   var pinMain = document.querySelector('.map__pin--main');
@@ -40,4 +40,5 @@
   /* До активации страницы */
   window.form.changeAbility(false);
   window.form.fillAddress();
+
 })();
