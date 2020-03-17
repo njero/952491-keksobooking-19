@@ -12,7 +12,7 @@
 
   var DEBOUNCE_INTERVAL = 300;
 
-  /*var onEscDown = function (evt, func) {
+  /* var onEscDown = function (evt, func) {
     if (evt.key === KeyboardCode.ESC) {
       func();
     }
@@ -43,7 +43,7 @@
     KeyboardCode: KeyboardCode,
     // onEscDown: onEscDown,
     renderErrorMessage: renderErrorMessage,
-    debounce: debounce
+    debounce: debounce,
   };
 })();
 
