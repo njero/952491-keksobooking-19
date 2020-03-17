@@ -23,10 +23,16 @@
 
   window.load(onLoadSuccess, onLoadError);
 
+
   var onPinClick = function (item, data) {
     item.addEventListener('click', function () {
       window.card.open(data);
-      item.classList.add('map__pin-active');
+    });
+
+    item.addEventListener('keydown', function (evt) {
+      if (evt.key === window.utils.KeyboardCode.ENTER) {
+        window.card.open(data);
+      }
     });
   };
 
