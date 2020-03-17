@@ -30,9 +30,9 @@
 
   var changeFormElementAbility = function (selector, isActivate) {
     if (isActivate) {
-      window.form.notice.querySelector(selector).removeAttribute('disabled');
+      noticeForm.querySelector(selector).removeAttribute('disabled');
     } else {
-      window.form.notice.querySelector(selector).setAttribute('disabled', '');
+      noticeForm.querySelector(selector).setAttribute('disabled', '');
     }
   };
 
@@ -72,7 +72,22 @@
     price.setAttribute('min', housePrices[selectType.value]);
   };
 
-  selectType.addEventListener('input', setPriceLengthLimit);
+  selectType.addEventListener('change', setPriceLengthLimit);
+
+  var selectTimein = noticeForm.querySelector('#timein');
+  var selectTimeout = noticeForm.querySelector('#timeout');
+
+  // Изменение времени заезда/выезда
+  var changeTimeIn = function () {
+    selectTimeout.value = selectTimein.value;
+  };
+
+  var changeTimeOut = function () {
+    selectTimein.value = selectTimeout.value;
+  };
+
+  selectTimein.addEventListener('change', changeTimeIn);
+  selectTimeout.addEventListener('change', changeTimeOut);
 
   // Основные атрибуты для полей ввода
   var mainAttributes = function (selector, required, minLength, maxLength) {
@@ -134,11 +149,21 @@
   roomNumber.addEventListener('input', guestInputValidation);
   noticeForm.querySelector('.ad-form__submit').addEventListener('click', guestInputValidation);
 
+  var formActivate = function () {
+    noticeForm.classList.remove('ad-form--disabled');
+    mainAttributes('#title', true, 30, 100);
+    mainAttributes('#price', true, 1000, 1000000);
+    fillAddress();
+    changeAbility(true);
+  };
+
+
+  /* До активации страницы */
+  changeAbility(false);
+  fillAddress();
+
 
   window.form = {
-    notice: noticeForm,
-    mainAttributes: mainAttributes,
-    changeAbility: changeAbility,
-    fillAddress: fillAddress,
+    activate: formActivate,
   };
 })();
