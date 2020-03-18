@@ -7,7 +7,7 @@
 
   var DEFAULT_MAIN_PIN_COORDS = {
     x: 600,
-    y: 375
+    y: 375,
   };
 
   var PinSize = {
@@ -19,7 +19,7 @@
     LEFT: 0,
     RIGHT: 1200,
     TOP: 130 + TAIL_HEIGHT,
-    BOTTOM: 630
+    BOTTOM: 630,
   };
 
 
@@ -37,7 +37,7 @@
     similarOffers = pins;
   };
 
-  window.load(onLoadSuccess, onLoadError);
+  window.serverData.load(onLoadSuccess, onLoadError);
 
   // Обработчики нажатия на метки (передаем саму метку и данные объявления)
   var onPinClick = function (item, data) {
@@ -84,7 +84,7 @@
 
     var startCoords = {
       x: evt.clientX,
-      y: evt.clientY
+      y: evt.clientY,
     };
 
     var onMouseMove = function (moveEvt) {
@@ -92,22 +92,22 @@
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
+        y: startCoords.y - moveEvt.clientY,
       };
 
       startCoords = {
         x: moveEvt.clientX,
-        y: moveEvt.clientY
+        y: moveEvt.clientY,
       };
 
       var mainPinPosition = {
         x: pinMain.offsetLeft - shift.x,
-        y: pinMain.offsetTop - shift.y
+        y: pinMain.offsetTop - shift.y,
       };
 
       var pinTailCoords = {
         x: mainPinPosition.x + Math.ceil(PinSize.WIDTH / 2),
-        y: mainPinPosition.y + PinSize.HEIGHT + TAIL_HEIGHT
+        y: mainPinPosition.y + PinSize.HEIGHT + TAIL_HEIGHT,
       };
 
       if (pinTailCoords.x >= DragBorder.LEFT && pinTailCoords.x <= DragBorder.RIGHT) {
@@ -134,12 +134,32 @@
   });
 
 
+  var removePins = function () {
+    var mapPinsItems = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    mapPinsItems.forEach(function (el) {
+      el.remove();
+    });
+  };
+
+  var deactivateMap = function () {
+    map.classList.add('map--faded');
+    pinMain.style.top = DEFAULT_MAIN_PIN_COORDS.y - PinSize.HEIGHT / 2 + 'px';
+    pinMain.style.left = DEFAULT_MAIN_PIN_COORDS.x - PinSize.WIDTH / 2 + 'px';
+    removePins();
+    var mapCard = document.querySelector('.map__card');
+    if (mapCard) {
+      mapCard.remove();
+    }
+    //  deactivateFilter();
+  };
+
   window.map = {
     DEFAULT_MAIN_PIN_COORDS: DEFAULT_MAIN_PIN_COORDS,
     PinSize: PinSize,
     element: map,
     pinMain: pinMain,
     showPins: showNewPins,
+    deactivate: deactivateMap,
   };
 })();
 
