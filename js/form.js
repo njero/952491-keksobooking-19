@@ -43,13 +43,6 @@
     }
   };
 
-  // Получение адреса
-  var getAddress = function () {
-    var x = window.map.DEFAULT_MAIN_PIN_COORD.X;
-    var y = window.map.DEFAULT_MAIN_PIN_COORD.Y;
-    return x + ', ' + y;
-  };
-
   /* Вставка адреса в поле формы */
   var setAddress = function (coords) {
     noticeForm.querySelector('#address').setAttribute('readonly', '');
