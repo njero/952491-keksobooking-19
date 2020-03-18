@@ -22,7 +22,6 @@
     rooms: filter.querySelector('#housing-rooms'),
     guests: filter.querySelector('#housing-guests'),
     features: filter.querySelector('#housing-features'),
-
   };
 
   var offers = [];
@@ -66,9 +65,12 @@
   });
 
   var resetFilter = function () {
-    Filters.forEach(function (el) {
-      el.value = 'any';
-    });
+
+    for (var key in Filters) {
+      if (Filters[key]) {
+        Filters[key].value = 'any';
+      }
+    }
     var featuresItems = Filters.features.querySelectorAll('input');
     featuresItems.forEach(function (feature) {
       feature.checked = false;
@@ -76,9 +78,11 @@
   };
 
   var deactivateFilters = function () {
-    Filters.forEach(function (el) {
-      el.disabled = true;
-    });
+    for (var key in Filters) {
+      if (Filters[key]) {
+        Filters[key].disabled = true;
+      }
+    }
     resetFilter();
     filter.removeEventListener('change', onFilterChange);
   };

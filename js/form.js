@@ -204,7 +204,8 @@
     noticeForm.reset();
     formDeactivate();
     window.map.deactivate();
-    // window.filter.deactivate();
+    window.pin.remove();
+    window.filter.deactivate();
     showMessage(success);
   };
 
@@ -218,6 +219,7 @@
     evt.preventDefault();
     formDeactivate();
     window.map.deactivate();
+    window.pin.remove();
     window.filter.deactivate();
   };
 
