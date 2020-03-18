@@ -12,6 +12,11 @@
   var selectTimeout = noticeForm.querySelector('#timeout');
   var submitBtn = noticeForm.querySelector('.ad-form__submit');
   var resetBtn = noticeForm.querySelector('.ad-form__reset');
+  var success = document.querySelector('#success').content.querySelector('.success');
+  var error = document.querySelector('#error').content.querySelector('.error');
+  var roomNumber = noticeForm.querySelector('#room_number');
+  var capacity = noticeForm.querySelector('#capacity');
+
 
   var formTags = [
     '#avatar',
@@ -100,9 +105,6 @@
 
   };
 
-  var roomNumber = noticeForm.querySelector('#room_number');
-  var capacity = noticeForm.querySelector('#capacity');
-
   // Валидация поля количества гостей
   var guestInputValidation = function () {
     switch (roomNumber.value) {
@@ -153,9 +155,6 @@
     removeFormListeners();
     setAddress(window.map.DEFAULT_MAIN_PIN_COORDS);
   };
-
-  var success = document.querySelector('#success').content.querySelector('.success');
-  var error = document.querySelector('#error').content.querySelector('.error');
 
   var closeSuccessMessage = function () {
     success.remove();
