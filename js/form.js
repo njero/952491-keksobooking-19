@@ -218,7 +218,7 @@
     evt.preventDefault();
     formDeactivate();
     window.map.deactivate();
-    // window.filter.deactivate();
+    window.filter.deactivate();
   };
 
   var addEventListeners = function () {
