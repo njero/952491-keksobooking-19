@@ -43,17 +43,10 @@
     }
   };
 
-  // Получение адреса
-  var getAddress = function () {
-    var x = Math.floor(parseInt(window.map.pinMain.style.left, 10) + window.map.PinSize.WIDTH / 2);
-    var y = Math.floor(parseInt(window.map.pinMain.style.top, 10) + window.map.PinSize.HEIGHT);
-    return x + ', ' + y;
-  };
-
   /* Вставка адреса в поле формы */
-  var fillAddress = function () {
+  var setAddress = function (coords) {
     noticeForm.querySelector('#address').setAttribute('readonly', '');
-    noticeForm.querySelector('#address').value = getAddress();
+    noticeForm.querySelector('#address').value = coords.x + ', ' + coords.y;
   };
 
 
@@ -153,17 +146,17 @@
     noticeForm.classList.remove('ad-form--disabled');
     mainAttributes('#title', true, 30, 100);
     mainAttributes('#price', true, 1000, 1000000);
-    fillAddress();
     changeAbility(true);
   };
 
 
   /* До активации страницы */
   changeAbility(false);
-  fillAddress();
+  setAddress(window.map.DEFAULT_MAIN_PIN_COORDS);
 
 
   window.form = {
     activate: formActivate,
+    setAddress: setAddress
   };
 })();
