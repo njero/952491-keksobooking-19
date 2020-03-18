@@ -4,11 +4,20 @@
   var pinMain = document.querySelector('.map__pin--main');
 
 
+  var onLoadError = function (errorMessage) {
+    window.utils.renderErrorMessage(errorMessage);
+  };
+
+  var onLoadSuccess = function (data) {
+    window.filter.activate(data);
+  };
+
+
   /* Функция активации элементов страницы */
   var activatePage = function () {
+    window.serverData.load(onLoadSuccess, onLoadError);
     window.map.element.classList.remove('map--faded');
     window.form.activate();
-    window.map.showPins();
   };
 
   /* Активация по нажатию мышью по метке */
