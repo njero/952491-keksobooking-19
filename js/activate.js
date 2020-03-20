@@ -16,20 +16,26 @@
     window.serverData.load(onLoadSuccess, onLoadError);
     window.map.element.classList.remove('map--faded');
     window.form.activate();
+    pinMain.removeEventListener('mouseup', onMainPinMouseUp);
+    pinMain.removeEventListener('keydown', onMainPinEnterDown);
+
   };
 
-  /* Активация по нажатию мышью по метке */
-  pinMain.addEventListener('mousedown', function (evt) {
+  var onMainPinMouseUp = function (evt) {
     if (evt.button === window.utils.MouseCode.LEFT) {
       activatePage();
     }
-  });
+  };
 
-  /* Активация по нажатию enter по метке */
-  pinMain.addEventListener('keydown', function (evt) {
+  var onMainPinEnterDown = function (evt) {
     if (evt.key === window.utils.KeyboardCode.ENTER) {
       activatePage();
     }
-  });
+  };
 
+  /* Активация по нажатию мышью по метке */
+  pinMain.addEventListener('mouseup', onMainPinMouseUp);
+
+  /* Активация по нажатию enter по метке */
+  pinMain.addEventListener('keydown', onMainPinEnterDown);
 })();

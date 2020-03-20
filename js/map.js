@@ -25,10 +25,8 @@
   var map = document.querySelector('.map');
   var pinMain = document.querySelector('.map__pin--main');
 
-
   // Отображение меток
   var showNewPins = function (data) {
-  //  console.log(data)
     var pins = window.pin.create(data);
     var similarListElement = document.querySelector('.map__pins');
     similarListElement.appendChild(pins);
@@ -80,7 +78,6 @@
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
-
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
@@ -91,16 +88,17 @@
 
   var deactivateMap = function () {
     map.classList.add('map--faded');
-    pinMain.style.top = DEFAULT_MAIN_PIN_COORDS.y - PinSize.HEIGHT / 2 + 'px';
+    pinMain.style.top = DEFAULT_MAIN_PIN_COORDS.y + PinSize.HEIGHT / 2 + 'px';
     pinMain.style.left = DEFAULT_MAIN_PIN_COORDS.x - PinSize.WIDTH / 2 + 'px';
     window.pin.remove();
     window.card.remove();
-    //  deactivateFilter();
+    window.filter.deactivate();
   };
 
   window.map = {
     DEFAULT_MAIN_PIN_COORDS: DEFAULT_MAIN_PIN_COORDS,
     PinSize: PinSize,
+    TAIL_HEIGHT: TAIL_HEIGHT,
     element: map,
     pinMain: pinMain,
     showPins: showNewPins,

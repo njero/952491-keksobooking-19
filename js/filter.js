@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+
   var PriceRange = {
     low: {
       MIN: 0,
@@ -9,14 +10,14 @@
       MIN: 10000,
       MAX: 50000
     },
-    height: {
+    high: {
       MIN: 50000,
       MAX: Infinity
     }
   };
 
   var filter = document.querySelector('.map__filters');
-  var Filters = {
+  var filters = {
     type: filter.querySelector('#housing-type'),
     price: filter.querySelector('#housing-price'),
     rooms: filter.querySelector('#housing-rooms'),
@@ -28,29 +29,29 @@
   var filteredOffers = [];
 
 
-  var filtrationItem = function (el, item, key) {
+  var filterItem = function (el, item, key) {
     return el.value === 'any' ? true : el.value === item[key].toString();
   };
 
-  var filtrationByType = function (item) {
-    return filtrationItem(Filters.type, item.offer, 'type');
+  var filterByType = function (item) {
+    return filterItem(filters.type, item.offer, 'type');
   };
 
-  var filtrationByPrice = function (item) {
-    var filteringPrice = PriceRange[Filters.price.value];
+  var filterByPrice = function (item) {
+    var filteringPrice = PriceRange[filters.price.value];
     return filteringPrice ? item.offer.price >= filteringPrice.MIN && item.offer.price <= filteringPrice.MAX : true;
   };
 
-  var filtrationByRooms = function (item) {
-    return filtrationItem(Filters.rooms, item.offer, 'rooms');
+  var filterByRooms = function (item) {
+    return filterItem(filters.rooms, item.offer, 'rooms');
   };
 
-  var filtrationByGuests = function (item) {
-    return filtrationItem(Filters.guests, item.offer, 'guests');
+  var filterByGuests = function (item) {
+    return filterItem(filters.guests, item.offer, 'guests');
   };
 
-  var filtrationByFeatures = function (item) {
-    var checkedFeaturesItems = Filters.features.querySelectorAll('input:checked');
+  var filterByFeatures = function (item) {
+    var checkedFeaturesItems = filters.features.querySelectorAll('input:checked');
     return Array.from(checkedFeaturesItems).every(function (element) {
       return item.offer.features.includes(element.value);
     });
@@ -58,7 +59,7 @@
 
   var onFilterChange = window.utils.debounce(function () {
     filteredOffers = offers;
-    filteredOffers = filteredOffers.filter(filtrationByType).filter(filtrationByPrice).filter(filtrationByRooms).filter(filtrationByGuests).filter(filtrationByFeatures);
+    filteredOffers = filteredOffers.filter(filterByType).filter(filterByPrice).filter(filterByRooms).filter(filterByGuests).filter(filterByFeatures);
     window.pin.remove();
     window.card.remove();
     window.map.showPins(filteredOffers);
@@ -66,21 +67,21 @@
 
   var resetFilter = function () {
 
-    for (var key in Filters) {
-      if (Filters[key]) {
-        Filters[key].value = 'any';
+    for (var key in filters) {
+      if (filters[key]) {
+        filters[key].value = 'any';
       }
     }
-    var featuresItems = Filters.features.querySelectorAll('input');
+    var featuresItems = filters.features.querySelectorAll('input:checked');
     featuresItems.forEach(function (feature) {
       feature.checked = false;
     });
   };
 
-  var deactivateFilters = function () {
-    for (var key in Filters) {
-      if (Filters[key]) {
-        Filters[key].disabled = true;
+  var deactivatefilters = function () {
+    for (var key in filters) {
+      if (filters[key]) {
+        filters[key].disabled = true;
       }
     }
     resetFilter();
@@ -88,6 +89,11 @@
   };
 
   var activateFilters = function (data) {
+    for (var key in filters) {
+      if (filters[key]) {
+        filters[key].disabled = false;
+      }
+    }
     offers = data.slice(0);
     onFilterChange();
     filter.addEventListener('change', onFilterChange);
@@ -96,6 +102,6 @@
 
   window.filter = {
     activate: activateFilters,
-    deactivate: deactivateFilters
+    deactivate: deactivatefilters
   };
 })();

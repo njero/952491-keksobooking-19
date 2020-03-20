@@ -21,11 +21,17 @@
   var renderErrorMessage = function (errorMessage) {
     var message = document.createElement('div');
 
-    message.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-    message.style.position = 'absolute';
-    message.style.left = 0;
-    message.style.right = 0;
+    message.style.position = 'fixed';
+    message.style.top = '50%';
+    message.style.left = '50%';
+    message.style.transform = 'translate(-50%, -50%)';
+    message.style.width = '500px';
+    message.style.padding = '40px';
+    message.style.textAlign = 'center';
+    message.style.zIndex = '100';
+    message.style.color = 'white';
     message.style.fontSize = '30px';
+    message.style.backgroundColor = 'red';
 
     message.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', message);

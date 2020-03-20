@@ -4,6 +4,7 @@
 (function () {
 
   var noticeForm = document.querySelector('.ad-form');
+  var title = document.querySelector('#title');
   var imagesInput = noticeForm.querySelector('#images');
   var avatarInput = noticeForm.querySelector('#avatar');
   var selectType = noticeForm.querySelector('#type');
@@ -16,7 +17,7 @@
   var error = document.querySelector('#error').content.querySelector('.error');
   var roomNumber = noticeForm.querySelector('#room_number');
   var capacity = noticeForm.querySelector('#capacity');
-
+  var invalidElements = [];
 
   var formTags = [
     '#avatar',
@@ -64,29 +65,24 @@
   };
 
   // -----Валидация----
-
-  avatarInput.setAttribute('accept', 'image/png, image/jpeg');
-
-  imagesInput.setAttribute('accept', 'image/png, image/jpeg');
-
   //  Ограничения поля цены при изменении типа формы
-  var setPriceLengthLimit = function () {
+  var onTypeChange = function () {
     price.placeholder = housePrices[selectType.value];
     price.setAttribute('min', housePrices[selectType.value]);
   };
 
 
   // Изменение времени заезда/выезда
-  var changeTimeIn = function () {
+  var onChangeTimeIn = function () {
     selectTimeout.value = selectTimein.value;
   };
 
-  var changeTimeOut = function () {
+  var onChangeTimeOut = function () {
     selectTimein.value = selectTimeout.value;
   };
 
   // Основные атрибуты для полей ввода
-  var mainAttributes = function (selector, required, minLength, maxLength) {
+  var setMainAttributes = function (selector, required, minLength, maxLength) {
     var elem = noticeForm.querySelector(selector);
     if (required) {
       elem.setAttribute('required', '');
@@ -103,6 +99,11 @@
       }
     }
 
+  };
+
+  var onGuestSelectChange = function () {
+    capacity.setCustomValidity('');
+    unhighlightInvalidElement(capacity);
   };
 
   // Валидация поля количества гостей
@@ -139,10 +140,17 @@
 
   };
 
+  var onSendClick = function () {
+    guestInputValidation();
+  };
+
   var formActivate = function () {
     noticeForm.classList.remove('ad-form--disabled');
-    mainAttributes('#title', true, 30, 100);
-    mainAttributes('#price', true, 1000, 1000000);
+    avatarInput.setAttribute('accept', 'image/png, image/jpeg');
+    imagesInput.setAttribute('accept', 'image/png, image/jpeg');
+    setMainAttributes('#title', true, 30, 100);
+    setMainAttributes('#price', true, 1000, 1000000);
+    price.value = housePrices[selectType.value];
     changeAbility(true);
     addEventListeners();
   };
@@ -154,6 +162,7 @@
     changeAbility(false);
     removeFormListeners();
     setAddress(window.map.DEFAULT_MAIN_PIN_COORDS);
+    window.filter.deactivate();
   };
 
   var closeSuccessMessage = function () {
@@ -195,7 +204,7 @@
   var showErrorMessage = function (evt) {
     window.utils.onEscDown(evt, closeErrorMessage);
     document.addEventListener('click', onErrorClick);
-    error.querySelector('error__button').removeEventListener('click', onErrorClick);
+    error.querySelector('.error__button').addEventListener('click', onErrorClick);
     document.querySelector('main').appendChild(error);
   };
 
@@ -203,13 +212,14 @@
     noticeForm.reset();
     formDeactivate();
     window.map.deactivate();
-    window.pin.remove();
-    window.filter.deactivate();
     showMessage(success);
   };
 
   var onSubmitClick = function (evt) {
-    evt.preventDefault();
+    evt.preventDefault();/*
+    noticeForm.querySelectorAll('select, input').forEach(function (el) {
+      unhighlightInvalidElement(el);
+    });*/
     var formData = new FormData(noticeForm);
     window.serverData.upload(formData, onSubmitSuccess, showErrorMessage);
   };
@@ -218,26 +228,53 @@
     evt.preventDefault();
     formDeactivate();
     window.map.deactivate();
-    window.pin.remove();
-    window.filter.deactivate();
+  };
+
+  var highlightInvalidElement = function (item) {
+    invalidElements.push(item);
+    item.style.borderColor = 'red';
+  };
+
+  var unhighlightInvalidElement = function (item) {
+    invalidElements.splice(invalidElements.indexOf(item), 1);
+    item.style.borderColor = '#d9d9d3';
+  };
+
+  var onFormInvalid = function (evt) {
+    highlightInvalidElement(evt.target);
+  };
+
+  var onElementCheckValidity = function (evt) {
+    if (!evt.target.checkValidity()) {
+      highlightInvalidElement(evt.target);
+    } else if (invalidElements.indexOf(evt.target) !== 1) {
+      unhighlightInvalidElement(evt.target);
+    }
   };
 
   var addEventListeners = function () {
-    selectType.addEventListener('change', setPriceLengthLimit);
-    selectTimein.addEventListener('change', changeTimeIn);
-    selectTimeout.addEventListener('change', changeTimeOut);
-    roomNumber.addEventListener('change', guestInputValidation);
-    submitBtn.addEventListener('click', guestInputValidation);
+    noticeForm.addEventListener('invalid', onFormInvalid, true);
+    noticeForm.addEventListener('change', onElementCheckValidity);
+    selectType.addEventListener('change', onTypeChange);
+    selectTimein.addEventListener('change', onChangeTimeIn);
+    selectTimeout.addEventListener('change', onChangeTimeOut);
+    roomNumber.addEventListener('change', onGuestSelectChange);
+    capacity.addEventListener('change', onGuestSelectChange);
+    submitBtn.addEventListener('click', onSendClick);
     noticeForm.addEventListener('submit', onSubmitClick);
     resetBtn.addEventListener('click', onResetBtnClick);
   };
 
   var removeFormListeners = function () {
-    selectType.removeEventListener('change', setPriceLengthLimit);
-    selectTimein.removeEventListener('change', changeTimeIn);
-    selectTimeout.removeEventListener('change', changeTimeOut);
-    roomNumber.removeEventListener('change', guestInputValidation);
-    submitBtn.removeEventListener('click', guestInputValidation);
+    noticeForm.removeEventListener('invalid', onFormInvalid, true);
+    price.addEventListener('change', onElementCheckValidity);
+    title.addEventListener('change', onElementCheckValidity);
+    selectType.removeEventListener('change', onTypeChange);
+    selectTimein.removeEventListener('change', onChangeTimeIn);
+    selectTimeout.removeEventListener('change', onChangeTimeOut);
+    roomNumber.removeEventListener('change', onGuestSelectChange);
+    capacity.removeEventListener('change', onGuestSelectChange);
+    submitBtn.removeEventListener('click', onSendClick);
     noticeForm.removeEventListener('submit', onSubmitClick);
     resetBtn.removeEventListener('click', onResetBtnClick);
   };

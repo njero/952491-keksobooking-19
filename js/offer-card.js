@@ -14,7 +14,25 @@
     var mapCard = document.querySelector('.map__card');
     if (mapCard) {
       mapCard.remove();
+      document.removeEventListener('keydown', onCloseEscDown);
+      mapCard.querySelector('.popup__close');
+      var closeButton = mapCard.querySelector('.popup__close');
+      closeButton.addEventListener('mousedown', onCloseCardBtnClick);
     }
+    var activePin = document.querySelector('.map__pin--active');
+
+    if (activePin) {
+      activePin.classList.remove('map__pin--active');
+    }
+
+  };
+
+  var onCloseEscDown = function (evt) {
+    window.utils.onEscDown(evt, removeCard);
+  };
+
+  var onCloseCardBtnClick = function () {
+    removeCard();
   };
 
   // Формирование выражения для вывода количества комнат и гостей с правильными падежами
@@ -75,27 +93,22 @@
     newCard.querySelector('.popup__description').textContent = data.offer.description;
 
     newCard.querySelector('.popup__features').innerHTML = '';
-    newCard.querySelector('.popup__features').appendChild(createFeatureFragment(data.offer.features));
-
-    newCard.querySelector('.popup__photos').removeChild(newCard.querySelector('.popup__photo'));
-    newCard.querySelector('.popup__photos').appendChild(createPhotosFragment(data.offer.photos));
-
+    if (data.offer.features.length) {
+      newCard.querySelector('.popup__features').appendChild(createFeatureFragment(data.offer.features));
+    } else {
+      newCard.querySelector('.popup__features').remove();
+    }
+    if (data.offer.photos.length) {
+      newCard.querySelector('.popup__photos').removeChild(newCard.querySelector('.popup__photo'));
+      newCard.querySelector('.popup__photos').appendChild(createPhotosFragment(data.offer.photos));
+    } else {
+      newCard.querySelector('.popup__photos').remove();
+    }
     newCard.querySelector('img').src = data.author.avatar;
 
-
     var closeButton = newCard.querySelector('.popup__close');
-
-    closeButton.addEventListener('mousedown', function (evt) {
-      if (evt.button === window.utils.MouseCode.LEFT) {
-        removeCard();
-      }
-    });
-
-    document.addEventListener('keydown', function (evt) {
-      if (evt.key === window.utils.KeyboardCode.ESC) {
-        removeCard();
-      }
-    });
+    closeButton.addEventListener('mousedown', onCloseCardBtnClick);
+    document.addEventListener('keydown', onCloseEscDown);
 
 
     var before = document.querySelector('.map__filters-container');
@@ -106,6 +119,6 @@
 
   window.card = {
     open: openCard,
-    remove: removeCard
+    remove: removeCard,
   };
 })();
