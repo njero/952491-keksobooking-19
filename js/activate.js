@@ -18,7 +18,6 @@
     window.form.activate();
     pinMain.removeEventListener('mouseup', onMainPinMouseUp);
     pinMain.removeEventListener('keydown', onMainPinEnterDown);
-
   };
 
   var onMainPinMouseUp = function (evt) {
@@ -33,9 +32,15 @@
     }
   };
 
-  /* Активация по нажатию мышью по метке */
-  pinMain.addEventListener('mouseup', onMainPinMouseUp);
+  var reset = function () {
+    /* Активация по нажатию мышью по метке */
+    pinMain.addEventListener('mouseup', onMainPinMouseUp);
+    /* Активация по нажатию enter по метке */
+    pinMain.addEventListener('keydown', onMainPinEnterDown);
+  };
 
-  /* Активация по нажатию enter по метке */
-  pinMain.addEventListener('keydown', onMainPinEnterDown);
+  window.activate = {
+    reset: reset
+  };
+
 })();

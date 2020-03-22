@@ -150,8 +150,8 @@
     imagesInput.setAttribute('accept', 'image/png, image/jpeg');
     setMainAttributes('#title', true, 30, 100);
     setMainAttributes('#price', true, 1000, 1000000);
-    price.value = housePrices[selectType.value];
     changeAbility(true);
+    price.placeholder = housePrices[selectType.value];
     addEventListeners();
   };
 
@@ -161,8 +161,10 @@
     noticeForm.classList.add('ad-form--disabled');
     changeAbility(false);
     removeFormListeners();
+    price.placeholder = housePrices[selectType.value];
     setAddress(window.map.DEFAULT_MAIN_PIN_COORDS);
     window.filter.deactivate();
+    window.activate.reset();
   };
 
   var closeSuccessMessage = function () {
@@ -175,7 +177,7 @@
     error.remove();
     document.removeEventListener('keydown', onErrorEscDown);
     error.removeEventListener('click', onErrorClick);
-    error.querySelector('error__button').removeEventListener('click', onErrorClick);
+    error.querySelector('.error__button').removeEventListener('click', onErrorClick);
   };
 
   var onSuccessEscDown = function (evt) {
@@ -210,16 +212,14 @@
 
   var onSubmitSuccess = function () {
     noticeForm.reset();
+    window.activate.reset();
     formDeactivate();
     window.map.deactivate();
     showMessage(success);
   };
 
   var onSubmitClick = function (evt) {
-    evt.preventDefault();/*
-    noticeForm.querySelectorAll('select, input').forEach(function (el) {
-      unhighlightInvalidElement(el);
-    });*/
+    evt.preventDefault();
     var formData = new FormData(noticeForm);
     window.serverData.upload(formData, onSubmitSuccess, showErrorMessage);
   };
@@ -255,6 +255,8 @@
   var addEventListeners = function () {
     noticeForm.addEventListener('invalid', onFormInvalid, true);
     noticeForm.addEventListener('change', onElementCheckValidity);
+    price.addEventListener('change', onElementCheckValidity);
+    title.addEventListener('change', onElementCheckValidity);
     selectType.addEventListener('change', onTypeChange);
     selectTimein.addEventListener('change', onChangeTimeIn);
     selectTimeout.addEventListener('change', onChangeTimeOut);
@@ -267,8 +269,9 @@
 
   var removeFormListeners = function () {
     noticeForm.removeEventListener('invalid', onFormInvalid, true);
-    price.addEventListener('change', onElementCheckValidity);
-    title.addEventListener('change', onElementCheckValidity);
+    noticeForm.removeEventListener('change', onElementCheckValidity);
+    price.removeEventListener('change', onElementCheckValidity);
+    title.removeEventListener('change', onElementCheckValidity);
     selectType.removeEventListener('change', onTypeChange);
     selectTimein.removeEventListener('change', onChangeTimeIn);
     selectTimeout.removeEventListener('change', onChangeTimeOut);

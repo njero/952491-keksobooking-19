@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var MAX_OFFERS = 5;
 
   var similarPinTemplate = document.querySelector('#pin').content
     .querySelector('.map__pin');
@@ -34,8 +33,7 @@
 
   /* Генерация меток */
   var createPins = function (data) {
-    var takeNumber = data.length > MAX_OFFERS ? MAX_OFFERS : data.length;
-
+    var takeNumber = data.length;
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < takeNumber; i++) {

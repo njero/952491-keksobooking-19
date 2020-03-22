@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var MAX_OFFERS = 5;
 
   var PriceRange = {
     low: {
@@ -30,7 +31,7 @@
 
 
   var filterItem = function (el, item, key) {
-    return el.value === 'any' ? true : el.value === item[key].toString();
+    return el.value === 'any' || el.value === item[key].toString();
   };
 
   var filterByType = function (item) {
@@ -58,8 +59,12 @@
   };
 
   var onFilterChange = window.utils.debounce(function () {
-    filteredOffers = offers;
-    filteredOffers = filteredOffers.filter(filterByType).filter(filterByPrice).filter(filterByRooms).filter(filterByGuests).filter(filterByFeatures);
+    filteredOffers = [];
+    for (var i = 0; i < offers.length && filteredOffers.length < MAX_OFFERS; i++) {
+      if (filterByType(offers[i]) && filterByPrice(offers[i]) && filterByRooms(offers[i]) && filterByGuests(offers[i]) && filterByFeatures(offers[i])) {
+        filteredOffers.push(offers[i]);
+      }
+    }
     window.pin.remove();
     window.card.remove();
     window.map.showPins(filteredOffers);
